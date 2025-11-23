@@ -72,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
                         String storedPassword = snapshot.getValue(String.class);
                         if (storedPassword != null && storedPassword.equals(password)) {
                             Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                            startActivity(intent);
                         }
                         else {
                             layoutPassword.setError("Incorrect password.");
