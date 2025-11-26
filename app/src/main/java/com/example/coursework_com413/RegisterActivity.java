@@ -72,8 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
             if (!valid) return;
 
             usersRef.child(username).get().addOnCompleteListener(task -> {
-                System.out.println("FIREBASE TASK RESULT = " + task.isSuccessful());
-                System.out.println("FIREBASE ERROR = " + (task.getException() != null ? task.getException().getMessage() : "none"));
                 if (task.isSuccessful()) {
                     DataSnapshot snapshot = task.getResult();
                     if (snapshot.exists()) {

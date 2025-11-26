@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/menu_activity_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".MenuActivity">
 
+    <!-- TOP HEADER -->
     <LinearLayout
         android:id="@+id/top_header"
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
             android:src="@drawable/fulllogo"
             android:contentDescription="Logo"
             android:layout_marginEnd="12dp"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -39,7 +38,7 @@
                 android:text="Quiet Study"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white" />
 
             <TextView
                 android:id="@+id/welcome_message"
@@ -48,19 +47,19 @@
                 android:text="Find a quiet place to study near you."
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
-                android:layout_marginTop="4dp"/>
+                android:layout_marginTop="4dp" />
         </LinearLayout>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rooms_recycler_view"
+    <!-- FRAGMENT CONTAINER (Middle section that switches between tabs) -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation"
         android:layout_below="@+id/top_header"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_above="@+id/bottom_navigation" />
 
+    <!-- BOTTOM NAVIGATION BAR -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -69,6 +68,6 @@
         app:menu="@menu/bottom_nav_menu"
         android:background="#3B91BA"
         app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"/>
+        app:itemTextColor="@color/white" />
 
 </RelativeLayout>
