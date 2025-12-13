@@ -3,6 +3,7 @@ package com.example.coursework_com413;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,6 +19,12 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        RoomsViewModel vm = new ViewModelProvider(this).get(RoomsViewModel.class);
+
+        String username = SessionManager.getUsername(this); // saved from login
+        vm.setUsername(username);
+        vm.startFavouritesListener();
 
         loadFragment(new HomeFragment());
 

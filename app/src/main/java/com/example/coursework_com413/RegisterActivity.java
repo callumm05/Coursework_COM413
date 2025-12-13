@@ -2,7 +2,6 @@ package com.example.coursework_com413;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -13,6 +12,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -26,7 +28,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        usersRef = FirebaseDatabase.getInstance("https://coursework-com413-default-rtdb.europe-west1.firebasedatabase.app/")
+        usersRef = FirebaseDatabase
+                .getInstance("https://coursework-com413-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users");
 
         editTxtUser = findViewById(R.id.editTxtUserR);
@@ -42,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(view -> {
 
             boolean valid = true;
+
             String username = editTxtUser.getText().toString().trim();
             String password = editTxtPass.getText().toString().trim();
             String confirmPassword = editTxtConfirmPass.getText().toString().trim();
@@ -69,32 +73,46 @@ public class RegisterActivity extends AppCompatActivity {
                 layoutConfirmPassR.setError("Passwords do not match.");
                 valid = false;
             }
+
             if (!valid) return;
 
             usersRef.child(username).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DataSnapshot snapshot = task.getResult();
-                    if (snapshot.exists()) {
-                        layoutUserR.setError("Username already exists.");
-                    }
-                    else {
-                        usersRef.child(username).setValue(password)
-                                .addOnCompleteListener(saveTask -> {
-                                    if (saveTask.isSuccessful()) {
-                                        Toast.makeText(RegisterActivity.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                                    else {
-                                        Toast.makeText(RegisterActivity.this, "Error: " + saveTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
+                if (!task.isSuccessful()) {
+                    Toast.makeText(this,
+                            "Error: " + task.getException().getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                DataSnapshot snapshot = task.getResult();
+                if (snapshot.exists()) {
+                    layoutUserR.setError("Username already exists.");
+                    return;
+                }
+
+                Map<String, Object> userData = new HashMap<>();
+                userData.put("password", password);
+                userData.put("favourites", new HashMap<>());
+
+                usersRef.child(username)
+                        .setValue(userData)
+                        .addOnCompleteListener(saveTask -> {
+                            if (saveTask.isSuccessful()) {
+                                Toast.makeText(
+                                        RegisterActivity.this,
+                                        "Registration Successful!",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                                finish();
+                            } else {
+                                Toast.makeText(
+                                        RegisterActivity.this,
+                                        "Error: " + saveTask.getException().getMessage(),
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
                         });
-                    }
-                }
-                else {
-                    Toast.makeText(RegisterActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
             });
         });
-
     }
 }
